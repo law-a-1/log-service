@@ -17,6 +17,10 @@
         "@typescript-eslint/indent": [
           "error",
           2
-        ]
+        ],
+      "@typescript-eslint/no-inferrable-types": "off",
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-non-null-assertion": "off",
+      "no-null/no-null": "off"
     }
   }
