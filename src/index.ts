@@ -4,6 +4,7 @@ dotenvExpand.expand(dotenv.config());
 
 import express from "express";
 import formData from 'express-form-data';
+import cors from 'cors';
 import { DB } from './db/mongodb';
 import { defaultRouter } from "./routes";
 import { logRouter } from "./routes/log";
@@ -19,13 +20,14 @@ import { loggerMiddleware } from "./util/middleware";
     await DB.init() 
   
     // Middlewares
+    app.use(cors())
     app.use(loggerMiddleware)
     app.use(formData.parse())
     app.use(express.json())
   
     // Routes
     app.use('/', defaultRouter())
-    app.use('/api/v1/', logRouter())
+    app.use('/logs', logRouter())
   
     app.listen(PORT, () => console.log(`Server started on http://${HOST}:${PORT}`))
   } catch (error) {
