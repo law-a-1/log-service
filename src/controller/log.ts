@@ -1,8 +1,8 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { DB } from '../db/mongodb';
 import { isLog, Log, LogFilter, LogQueryParams, LogType } from '../util/types';
 
-export async function getLog(req : Request<LogQueryParams>, res: Response) {
+export async function getLog(req : Request, res: Response, next: NextFunction) {
   const { page, page_size, type, service, time_start, time_end } = req.query as unknown as LogQueryParams
 
   const pageNum = (page && page > 0) ? page -1 : 0
@@ -32,14 +32,31 @@ export async function getLog(req : Request<LogQueryParams>, res: Response) {
       data: logs,
     })
   } catch (error) {
-    console.log(error)
-    return res.status(500).send({
-      error: error
-    })
+    next(error)
   }
 }
 
-export async function postLog(req : Request, res: Response) {
+export async function getLogById(req: Request, res: Response, next: NextFunction) {
+  const id = req.params.id
+
+  try {
+    if (id.match(/^[0-9a-fA-F]{24}$/)) {
+      // ID Validation check
+      const log = await DB.LogModel.findById(id)
+      if (log) {
+        return res.status(200).send(log)
+      }
+    }
+  } catch (error) {
+    next(error)
+  }
+
+  return res.status(404).send({
+    error: 'Log not found'
+  })
+}
+
+export async function postLog(req : Request, res: Response, next: NextFunction) {
   const logData: Log = req.body
 
   // TODO: validation feedback
@@ -58,8 +75,6 @@ export async function postLog(req : Request, res: Response) {
       ...(verbose === 'true') && {data: log}
     })
   } catch (error) {
-    return res.status(500).send({
-      error: error
-    })
+    next(error)
   }
 }
