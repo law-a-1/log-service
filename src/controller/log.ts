@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { DB, ILog, isLog } from '../db/mongodb';
-import { LogFilter, LogQueryParams, LogType } from '../util/types';
+import { DB } from '../db/mongodb';
+import { isLog, Log, LogFilter, LogQueryParams, LogType } from '../util/types';
 
 export async function getLog(req : Request<LogQueryParams>, res: Response) {
   const { page, type, service, time_start, time_end } = req.query as unknown as LogQueryParams
@@ -41,7 +41,7 @@ export async function getLog(req : Request<LogQueryParams>, res: Response) {
 }
 
 export async function postLog(req : Request, res: Response) {
-  const logData: ILog = req.body
+  const logData: Log = req.body
 
   // TODO: validation feedback
   if (!isLog(logData)) {

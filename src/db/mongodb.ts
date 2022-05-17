@@ -1,18 +1,6 @@
-import mongoose, { Document } from "mongoose";
-import { LogType } from "../util/types";
+import mongoose from "mongoose";
+import { Log } from "../util/types";
 
-export interface ILog extends Document {
-  created_at?: Date,
-  type: LogType,
-  service: string,
-  message: string
-}
-
-export function isLog(arg: any): arg is ILog {
-  return arg?.type in LogType
-  && typeof(arg?.service) === 'string' 
-  && typeof(arg?.message) === 'string'
-}
 
 const LogSchema = new mongoose.Schema({
   created_at: {
@@ -33,7 +21,7 @@ const LogSchema = new mongoose.Schema({
 });
 
 export class DB {
-  private static logModel: mongoose.Model<ILog>
+  private static logModel: mongoose.Model<Log>
   
   public static async init() {
     console.log(`[...] Creating MongoDB Connection: ${process.env.DATABASE_URL}`)
