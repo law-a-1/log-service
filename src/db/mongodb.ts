@@ -1,10 +1,5 @@
 import mongoose, { Document } from "mongoose";
-
-enum LogType {
-  INFO = 'INFO',
-  DEBUG = 'DEBUG',
-  ERROR = 'ERROR'
-}
+import { LogType } from "../util/types";
 
 export interface ILog extends Document {
   created_at?: Date,
