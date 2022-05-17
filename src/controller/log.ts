@@ -3,10 +3,10 @@ import { DB } from '../db/mongodb';
 import { isLog, Log, LogFilter, LogQueryParams, LogType } from '../util/types';
 
 export async function getLog(req : Request<LogQueryParams>, res: Response) {
-  const { page, type, service, time_start, time_end } = req.query as unknown as LogQueryParams
+  const { page, page_size, type, service, time_start, time_end } = req.query as unknown as LogQueryParams
 
   const pageNum = (page && page > 0) ? page -1 : 0
-  const pageSize = 5
+  const pageSize = page_size || 10
 
   const filters: LogFilter = {
     ...(type) && {type: type.toUpperCase() as LogType},

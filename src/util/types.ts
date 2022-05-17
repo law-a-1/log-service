@@ -19,6 +19,7 @@ export function isLog(arg: any): arg is Log {
 
 export type LogQueryParams = {
   page?: number,
+  page_size?: number,
   type?: LogType,
   service?: string,
   time_start?: Date,
