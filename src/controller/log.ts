@@ -29,7 +29,6 @@ export async function getLog(req : Request<LogQueryParams>, res: Response) {
     return res.status(200).send({
       page: pageNum + 1,
       pages,
-      filters,
       data: logs,
     })
   } catch (error) {
@@ -53,9 +52,10 @@ export async function postLog(req : Request, res: Response) {
 
   try {
     const log = await new DB.LogModel(logData).save()
+    const verbose = req.query.verbose || false
     return res.status(201).send({
       message: 'Success',
-      data: log
+      ...(verbose === 'true') && {data: log}
     })
   } catch (error) {
     return res.status(500).send({
