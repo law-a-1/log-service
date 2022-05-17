@@ -8,7 +8,7 @@ import cors from 'cors';
 import { DB } from './db/mongodb';
 import { defaultRouter } from "./routes";
 import { logRouter } from "./routes/log";
-import { loggerMiddleware } from "./util/middleware";
+import { errorHandler, loggerMiddleware } from "./util/middleware";
 
 (async () => {
   try {
@@ -28,6 +28,9 @@ import { loggerMiddleware } from "./util/middleware";
     // Routes
     app.use('/', defaultRouter())
     app.use('/logs', logRouter())
+
+    // Error Handler
+    app.use(errorHandler)
   
     app.listen(PORT, () => console.log(`Server started on http://${HOST}:${PORT}`))
   } catch (error) {
